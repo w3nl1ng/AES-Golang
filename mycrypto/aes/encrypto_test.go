@@ -27,6 +27,30 @@ func TestEncrypto128(t *testing.T) {
 	stdAESCipher := standLibraryAESEncrypto([]byte(plaintext), []byte(key))
 
 	if !reflect.DeepEqual(myAESCipher, stdAESCipher) {
-		t.Fatal("my AES encrypto return an wrong cipher")
+		t.Fatal("my AES encrypto return a wrong cipher")
+	}
+}
+
+func TestEncrypto192(t *testing.T) {
+	key := "0123456789abcdefghijklmn"
+	plaintext := "hello, this is the plaintext!!!!"
+
+	myAESCipher := Encrypto([]byte(plaintext), []byte(key))
+	stdAESCipher := standLibraryAESEncrypto([]byte(plaintext), []byte(key))
+
+	if !reflect.DeepEqual(myAESCipher, stdAESCipher) {
+		t.Fatal("my AES encrypto return a wrong cipher")
+	}
+}
+
+func TestEncrypto256(t *testing.T) {
+	key := "0123456789abcdefghijklmnopqrstuv"
+	plaintext := "hello, this is the plaintext!!!!"
+
+	myAESCipher := Encrypto([]byte(plaintext), []byte(key))
+	stdAESCipher := standLibraryAESEncrypto([]byte(plaintext), []byte(key))
+
+	if !reflect.DeepEqual(myAESCipher, stdAESCipher) {
+		t.Fatal("my AES encrypto return a wrong cipher")
 	}
 }

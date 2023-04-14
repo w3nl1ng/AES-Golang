@@ -4,7 +4,7 @@ package aes
 const nb int = 4
 
 
-var sbox = [256]byte{
+var sBox = [256]byte{
     0x63, 0x7c, 0x77, 0x7b, 0xf2, 0x6b, 0x6f, 0xc5, 0x30, 0x01, 0x67, 0x2b, 0xfe, 0xd7, 0xab, 0x76,
     0xca, 0x82, 0xc9, 0x7d, 0xfa, 0x59, 0x47, 0xf0, 0xad, 0xd4, 0xa2, 0xaf, 0x9c, 0xa4, 0x72, 0xc0,
     0xb7, 0xfd, 0x93, 0x26, 0x36, 0x3f, 0xf7, 0xcc, 0x34, 0xa5, 0xe5, 0xf1, 0x71, 0xd8, 0x31, 0x15,
@@ -28,7 +28,7 @@ var rcon = [11]byte{
     0x87, 0x01, 0x02, 0x04, 0x08, 0x10, 0x20, 0x40, 0x80, 0x1b, 0x36,
 };
 
-
+// 密钥扩展
 func keyExpansion(key []byte, roundKey []byte, nbK int, nr int) {
     var tempByte [4]byte
     var a0       byte 
@@ -50,16 +50,16 @@ func keyExpansion(key []byte, roundKey []byte, nbK int, nr int) {
             tempByte[1] = tempByte[2]
             tempByte[2] = tempByte[3]
             tempByte[3] = a0
-            tempByte[0] = sbox[int(tempByte[0])]
-            tempByte[1] = sbox[int(tempByte[1])]
-            tempByte[2] = sbox[int(tempByte[2])]
-            tempByte[3] = sbox[int(tempByte[3])]
+            tempByte[0] = sBox[int(tempByte[0])]
+            tempByte[1] = sBox[int(tempByte[1])]
+            tempByte[2] = sBox[int(tempByte[2])]
+            tempByte[3] = sBox[int(tempByte[3])]
             tempByte[0] = tempByte[0] ^ rcon[i / nbK]
         } else if (nbK == 8 && i % nbK == 4){
-            tempByte[0] = sbox[int(tempByte[0])]
-            tempByte[1] = sbox[int(tempByte[1])]
-            tempByte[2] = sbox[int(tempByte[2])]
-            tempByte[3] = sbox[int(tempByte[3])]
+            tempByte[0] = sBox[int(tempByte[0])]
+            tempByte[1] = sBox[int(tempByte[1])]
+            tempByte[2] = sBox[int(tempByte[2])]
+            tempByte[3] = sBox[int(tempByte[3])]
         }
         roundKey[i * 4 + 0] = roundKey[(i - nbK) * 4 + 0] ^ tempByte[0]
         roundKey[i * 4 + 1] = roundKey[(i - nbK) * 4 + 1] ^ tempByte[1]
@@ -68,6 +68,7 @@ func keyExpansion(key []byte, roundKey []byte, nbK int, nr int) {
     }
 }
 
+// 轮密钥加
 func addRoundKey(round int, state [][]byte, roundKey []byte) {
     for i := 0; i < 4; i++ {
         for j := 0; j < 4; j++ {
@@ -76,15 +77,16 @@ func addRoundKey(round int, state [][]byte, roundKey []byte) {
     }
 }
 
-
+// 字节代换
 func subBytes(state [][]byte){
     for i := 0; i < 4; i++ {
         for j := 0; j < 4; j++ {
-            state[i][j] = sbox[state[i][j]]
+            state[i][j] = sBox[state[i][j]]
         }
     }
 }
 
+// 行移位
 func shiftRows(state [][]byte){
     var tempByte byte;
     
@@ -114,6 +116,7 @@ func xtime(x byte) byte {
     return ((x << 1) ^ (((x >> 7) & 0x01) * 0x1b))
 }
 
+// 列混淆
 func mixColumns(state [][]byte) {
     var Tmp, Tm, t byte;
     for i := 0; i < 4; i++ {
@@ -134,7 +137,7 @@ func mixColumns(state [][]byte) {
     }
 }
 
-
+// 单独加密一个block
 func encryptoBlock(in []byte, roundKey []byte, nr int, out []byte) {
     round := 0
     
@@ -169,7 +172,7 @@ func encryptoBlock(in []byte, roundKey []byte, nr int, out []byte) {
     } 
 }
 
-
+// 对外接口
 func Encrypto(plaintext []byte, key []byte) []byte {
 
     ret := make([]byte, 0)
