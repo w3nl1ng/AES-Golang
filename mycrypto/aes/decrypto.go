@@ -101,10 +101,9 @@ func decryptoBlock(in []byte, roundKey []byte, nr int, out []byte) {
     }
 
     
-    // round Nr : add round key, 第Nr回合: 僅執行-key XOR block - key使用
     addRoundKey(nr, state, roundKey);
 
-    // Round Nr-1 ~ 1, 反覆執行 1 ~ Nr-1回合
+
     for round = nr - 1; round > 0; round-- {
         shiftRowsInv(state);
         subBytesInv(state);
@@ -112,19 +111,10 @@ func decryptoBlock(in []byte, roundKey []byte, nr int, out []byte) {
         mixColumnsInv(state);
     }
 
-    // Round Nr, no MixColumns(), 第 Nr 回合 沒有混合行運算
     shiftRowsInv(state);
     subBytesInv(state);
     addRoundKey(0, state, roundKey);
 
-    /**
-     *  將state[] transform 到 out[]上
-     *  圖示:
-     *   [b0 b4 b8  b12
-     *    b1 b5 b9  b13    --> [b0 b1 b2 ... b15]
-     *    b2 b6 b10 b14
-     *    b3 b7 b11 b15]
-     */
     for i := 0; i < 4; i++ {
         for j := 0; j < 4; j++ {
             out[i * 4 + j]=state[j][i]
