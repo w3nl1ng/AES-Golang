@@ -2,8 +2,8 @@
 package main
 
 import (
-	"cryptoproj/mycrypto/aes"
-	"cryptoproj/mycrypto/util"
+	"github.com/w3nl1ng/AES-Golang/mycrypto/aes"
+	"github.com/w3nl1ng/AES-Golang/mycrypto/util"
 	"fmt"
 )
 

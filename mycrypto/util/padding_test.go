@@ -3,7 +3,7 @@ package util
 import (
 	"reflect"
 	"testing"
-	myaes "cryptoproj/mycrypto/aes"
+	myaes "github.com/w3nl1ng/AES-Golang/mycrypto/aes"
 )
 
 func TestPKCS7Padding1(t *testing.T) {
